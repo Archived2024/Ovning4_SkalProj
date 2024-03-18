@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace SkalProj_Datastrukturer_Minne
 {
@@ -8,6 +9,7 @@ namespace SkalProj_Datastrukturer_Minne
         /// The main method, vill handle the menues for the program
         /// </summary>
         /// <param name="args"></param>
+        static List<string> theList = new List<string>();
         static void Main()
         {
 
@@ -62,22 +64,56 @@ namespace SkalProj_Datastrukturer_Minne
         /// </summary>
         static void ExamineList()
         {
-            /*
-             * Loop this method untill the user inputs something to exit to main menue.
-             * Create a switch statement with cases '+' and '-'
-             * '+': Add the rest of the input to the list (The user could write +Adam and "Adam" would be added to the list)
-             * '-': Remove the rest of the input from the list (The user could write -Adam and "Adam" would be removed from the list)
-             * In both cases, look at the count and capacity of the list
-             * As a default case, tell them to use only + or -
-             * Below you can see some inspirational code to begin working.
-            */
+            while (true)
+            {
+                Console.WriteLine("Enter '+' to add or '-' to remove from the list (or any other key to exit):");
+                string input = Console.ReadLine();
 
-            //List<string> theList = new List<string>();
-            //string input = Console.ReadLine();
-            //char nav = input[0];
-            //string value = input.substring(1);
+                if (string.IsNullOrEmpty(input))
+                {
+                    Console.WriteLine("Invalid input. Please try again.");
+                    continue;
+                }
 
-            //switch(nav){...}
+                char nav = input[0];
+                string value = input.Substring(1);
+
+                switch (nav)
+                {
+                    case '+':
+                        theList.Add(value); //Ö1,F2 + F3: Listans kapacitet ökar inte förrän vi överstiger kapaciteten
+                                            //som redan finns inbyggd som grund i List<T>. Den ökar med 4. Alltså om vi lagt till fyra och sen
+                                            //lägger till en femte så kommer kapaciteten öka från 4 till 8
+                                            //Ö1,F4: Kapaciteten ökar inte på grund av att List använder en konstant tidskomplexitetsstrategi
+                                            //för att lägga till element. Detta görs genom att fördubbla listans storlek när den väl överskrider nuvarande kapaciteten
+                                            //vilket gör att arbetskostnaden för att lägga till element blir konstant som i sin tur bidrar till en balans mellan prestanda och minnesanvändning.
+                        Console.WriteLine($"Added '{value}' to the list.");
+                        break;
+                    case '-':
+                        if (theList.Contains(value))
+                        {
+                            theList.Remove(value);//Ö1,F5: Nej Kapaciteten minskar inte. Om vi tillexempel lägger till 5 st så att standard kapaciteten ökar,
+                                                  //minskar inte kapaciteten om vi börjar ta bort saker i listan utan förblir den samma. 
+                            Console.WriteLine($"Removed '{value}' from the list.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"'{value}' not found in the list.");
+                        }
+                        break;
+                    default:
+                        Console.WriteLine("Please use only '+' or '-' to manipulate the list.");
+                        return;
+                        //Ö1,F6: En egendefinierad Array kan vara bra att använda när man har en
+                        //samling med fast storlek som du vet i förväg och inte kommer behöva ändra storlek på dynamiskt.
+                        //Det kan då vara mer minneseffektivt.
+                        //Arrayer kan i vissa användningsfall också vara snabbare iochmed att de inte har ett förutbestämd kapacitetshantering.
+             
+                }
+
+                Console.WriteLine($"Current count: {theList.Count}. Capacity: {theList.Capacity}");
+                //Ö1.
+            }
         }
 
         /// <summary>

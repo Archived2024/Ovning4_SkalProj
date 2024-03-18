@@ -10,6 +10,7 @@ namespace SkalProj_Datastrukturer_Minne
         /// </summary>
         /// <param name="args"></param>
         static List<string> theList = new List<string>();
+        static Queue<string> theQueue = new Queue<string>();
         static void Main()
         {
 
@@ -108,7 +109,7 @@ namespace SkalProj_Datastrukturer_Minne
                         //samling med fast storlek som du vet i förväg och inte kommer behöva ändra storlek på dynamiskt.
                         //Det kan då vara mer minneseffektivt.
                         //Arrayer kan i vissa användningsfall också vara snabbare iochmed att de inte har ett förutbestämd kapacitetshantering.
-             
+
                 }
 
                 Console.WriteLine($"Current count: {theList.Count}. Capacity: {theList.Capacity}");
@@ -121,35 +122,87 @@ namespace SkalProj_Datastrukturer_Minne
         /// </summary>
         static void ExamineQueue()
         {
-            /*
-             * Loop this method untill the user inputs something to exit to main menue.
-             * Create a switch with cases to enqueue items or dequeue items
-             * Make sure to look at the queue after Enqueueing and Dequeueing to see how it behaves
-            */
+            while (true)
+            {
+                Console.WriteLine("Please navigate through the queue operations by inputting the number \n(1, 2, 0) of your choice"
+                    + "\n1. Enqueue a person"
+                    + "\n2. Dequeue a person"
+                    + "\n0. Exit to main menu");
+                char input = ' ';
+                try
+                {
+                    input = Console.ReadLine()![0];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Please enter some input!");
+                }
+                switch (input)
+                {
+                    case '1':
+                        Console.WriteLine("Enter the name of the person to enqueue:");
+                        string person = Console.ReadLine();
+                        theQueue.Enqueue(person);
+                        Console.WriteLine($"{person} has been added to the queue.");
+                        theQueue.PrintQueue();
+                        break;
+                    case '2':
+                        try
+                        {
+                            string dequeuedPerson = theQueue.Dequeue();
+                            Console.WriteLine($"{dequeuedPerson} has been dequeued from the queue.");
+                            theQueue.PrintQueue();
+                        }
+                        catch (InvalidOperationException e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                        break;
+                    case '0':
+                        return;
+                    default:
+                        Console.WriteLine("Please enter some valid input (0, 1, 2)");
+                        break;
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Examines the datastructure Stack
+            /// </summary>
+            static void ExamineStack()
+            {
+            //Det är inte så smart att använda en Stack i det här fallet pga
+            //att det är inte så en kö fungerar. En kö ska fungera som en "först in, först ut"-metod
+            //men det går inte att utföra i en stack då den är baserad på "först in, sist ut"-metod
+            Stack<char> stack = new Stack<char>();
+
+            Console.WriteLine("Enter a string to reverse:");
+            string input = Console.ReadLine();
+            foreach (char c in input)
+            {
+                stack.Push(c);
+            }
+            Console.WriteLine("Reversed string:");
+            while (stack.Count > 0)
+            {
+                Console.Write(stack.Pop());
+            }
+            Console.WriteLine();
+            }
+
+            static void CheckParanthesis()
+            {
+                /*
+                 * Use this method to check if the paranthesis in a string is Correct or incorrect.
+                 * Example of correct: (()), {}, [({})],  List<int> list = new List<int>() { 1, 2, 3, 4 };
+                 * Example of incorrect: (()]), [), {[()}],  List<int> list = new List<int>() { 1, 2, 3, 4 );
+                 */
+
+            }
+
         }
-
-        /// <summary>
-        /// Examines the datastructure Stack
-        /// </summary>
-        static void ExamineStack()
-        {
-            /*
-             * Loop this method until the user inputs something to exit to main menue.
-             * Create a switch with cases to push or pop items
-             * Make sure to look at the stack after pushing and and poping to see how it behaves
-            */
-        }
-
-        static void CheckParanthesis()
-        {
-            /*
-             * Use this method to check if the paranthesis in a string is Correct or incorrect.
-             * Example of correct: (()), {}, [({})],  List<int> list = new List<int>() { 1, 2, 3, 4 };
-             * Example of incorrect: (()]), [), {[()}],  List<int> list = new List<int>() { 1, 2, 3, 4 );
-             */
-
-        }
-
     }
-}
+
 

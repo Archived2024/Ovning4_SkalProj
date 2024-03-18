@@ -171,36 +171,36 @@ namespace SkalProj_Datastrukturer_Minne
             /// <summary>
             /// Examines the datastructure Stack
             /// </summary>
-            static void ExamineStack()
-            {
-            //Det är inte så smart att använda en Stack i det här fallet pga
-            //att det är inte så en kö fungerar. En kö ska fungera som en "först in, först ut"-metod
-            //men det går inte att utföra i en stack då den är baserad på "först in, sist ut"-metod
-            Stack<char> stack = new Stack<char>();
+        static void ExamineStack()
+        {
+        //Det är inte så smart att använda en Stack i det här fallet pga
+        //att det är inte så en kö fungerar. En kö ska fungera som en "först in, först ut"-metod
+        //men det går inte att utföra i en stack då den är baserad på "först in, sist ut"-metod
+        Stack<char> stack = new Stack<char>();
 
-            Console.WriteLine("Enter a string to reverse:");
-            string input = Console.ReadLine();
-            foreach (char c in input)
-            {
-                stack.Push(c);
-            }
-            Console.WriteLine("Reversed string:");
-            while (stack.Count > 0)
-            {
-                Console.Write(stack.Pop());
-            }
-            Console.WriteLine();
-            }
+        Console.WriteLine("Enter a string to reverse:");
+        string input = Console.ReadLine();
+        foreach (char c in input)
+        {
+            stack.Push(c);
+        }
+        Console.WriteLine("Reversed string:");
+        while (stack.Count > 0)
+        {
+            Console.Write(stack.Pop());
+        }
+        Console.WriteLine();
+        }
 
-            static void CheckParanthesis()
-            {
-                /*
-                 * Use this method to check if the paranthesis in a string is Correct or incorrect.
-                 * Example of correct: (()), {}, [({})],  List<int> list = new List<int>() { 1, 2, 3, 4 };
-                 * Example of incorrect: (()]), [), {[()}],  List<int> list = new List<int>() { 1, 2, 3, 4 );
-                 */
+        static void CheckParanthesis()
+        {
+            /*
+                * Use this method to check if the paranthesis in a string is Correct or incorrect.
+                * Example of correct: (()), {}, [({})],  List<int> list = new List<int>() { 1, 2, 3, 4 };
+                * Example of incorrect: (()]), [), {[()}],  List<int> list = new List<int>() { 1, 2, 3, 4 );
+                */
 
-            }
+        }
 
         }
     }

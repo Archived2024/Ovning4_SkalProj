@@ -164,45 +164,85 @@ namespace SkalProj_Datastrukturer_Minne
                     default:
                         Console.WriteLine("Please enter some valid input (0, 1, 2)");
                         break;
-                    }
                 }
             }
+        }
 
-            /// <summary>
-            /// Examines the datastructure Stack
-            /// </summary>
+        /// <summary>
+        /// Examines the datastructure Stack
+        /// </summary>
         static void ExamineStack()
         {
-        //Det är inte så smart att använda en Stack i det här fallet pga
-        //att det är inte så en kö fungerar. En kö ska fungera som en "först in, först ut"-metod
-        //men det går inte att utföra i en stack då den är baserad på "först in, sist ut"-metod
-        Stack<char> stack = new Stack<char>();
+            //Det är inte så smart att använda en Stack i det här fallet pga
+            //att det är inte så en kö fungerar. En kö ska fungera som en "först in, först ut"-metod
+            //men det går inte att utföra i en stack då den är baserad på "först in, sist ut"-metod
+            Stack<char> stack = new Stack<char>();
 
-        Console.WriteLine("Enter a string to reverse:");
-        string input = Console.ReadLine();
-        foreach (char c in input)
-        {
-            stack.Push(c);
-        }
-        Console.WriteLine("Reversed string:");
-        while (stack.Count > 0)
-        {
-            Console.Write(stack.Pop());
-        }
-        Console.WriteLine();
+            Console.WriteLine("Enter a string to reverse:");
+            string input = Console.ReadLine();
+            foreach (char c in input)
+            {
+                stack.Push(c);
+            }
+            Console.WriteLine("Reversed string:");
+            while (stack.Count > 0)
+            {
+                Console.Write(stack.Pop());
+            }
+            Console.WriteLine();
         }
 
         static void CheckParanthesis()
         {
-        /*
-        * Use this method to check if the paranthesis in a string is Correct or incorrect.
-        * Example of correct: (()), {}, [({})],  List<int> list = new List<int>() { 1, 2, 3, 4 };
-        * Example of incorrect: (()]), [), {[()}],  List<int> list = new List<int>() { 1, 2, 3, 4 );
-        */
+            /*
+            * Use this method to check if the paranthesis in a string is Correct or incorrect.
+            * Example of correct: (()), {}, [({})],  List<int> list = new List<int>() { 1, 2, 3, 4 };
+            * Example of incorrect: (()]), [), {[()}],  List<int> list = new List<int>() { 1, 2, 3, 4 );
+            */
+            Console.WriteLine("Enter a string with parantheses to check if its parentheses are balanced:");
+            string input = Console.ReadLine();
+
+            if (IsParenthesisBalanced(input))
+            {
+                Console.WriteLine("The string has correct parentheses.");
+            }
+            else
+            {
+                Console.WriteLine("The string has incorrect parentheses.");
+            }
 
         }
 
+        static bool IsParenthesisBalanced(string input)
+        {
+            Stack<char> stack = new Stack<char>();
+
+            foreach (char c in input)
+            {
+                if (c == '(' || c == '{' || c == '[')
+                {
+                    stack.Push(c);
+                }
+                else if (c == ')' || c == '}' || c == ']')
+                {
+                    if (stack.Count == 0)
+                    {
+                        return false;
+                    }
+
+                    char top = stack.Pop();
+                    if ((c == ')' && top != '(') || (c == '}' && top != '{') || (c == ']' && top != '['))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return stack.Count == 0;
         }
+
     }
+}
+
 
 

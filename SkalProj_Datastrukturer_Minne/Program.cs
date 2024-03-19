@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace SkalProj_Datastrukturer_Minne
 {
@@ -8,6 +9,8 @@ namespace SkalProj_Datastrukturer_Minne
         /// The main method, vill handle the menues for the program
         /// </summary>
         /// <param name="args"></param>
+        static List<string> theList = new List<string>();
+        static Queue<string> theQueue = new Queue<string>();
         static void Main()
         {
 
@@ -62,22 +65,56 @@ namespace SkalProj_Datastrukturer_Minne
         /// </summary>
         static void ExamineList()
         {
-            /*
-             * Loop this method untill the user inputs something to exit to main menue.
-             * Create a switch statement with cases '+' and '-'
-             * '+': Add the rest of the input to the list (The user could write +Adam and "Adam" would be added to the list)
-             * '-': Remove the rest of the input from the list (The user could write -Adam and "Adam" would be removed from the list)
-             * In both cases, look at the count and capacity of the list
-             * As a default case, tell them to use only + or -
-             * Below you can see some inspirational code to begin working.
-            */
+            while (true)
+            {
+                Console.WriteLine("Enter '+' to add or '-' to remove from the list (or any other key to exit):");
+                string input = Console.ReadLine();
 
-            //List<string> theList = new List<string>();
-            //string input = Console.ReadLine();
-            //char nav = input[0];
-            //string value = input.substring(1);
+                if (string.IsNullOrEmpty(input))
+                {
+                    Console.WriteLine("Invalid input. Please try again.");
+                    continue;
+                }
 
-            //switch(nav){...}
+                char nav = input[0];
+                string value = input.Substring(1);
+
+                switch (nav)
+                {
+                    case '+':
+                        theList.Add(value); //Ö1,F2 + F3: Listans kapacitet ökar inte förrän vi överstiger kapaciteten
+                                            //som redan finns inbyggd som grund i List<T>. Den ökar med 4. Alltså om vi lagt till fyra och sen
+                                            //lägger till en femte så kommer kapaciteten öka från 4 till 8
+                                            //Ö1,F4: Kapaciteten ökar inte på grund av att List använder en konstant tidskomplexitetsstrategi
+                                            //för att lägga till element. Detta görs genom att fördubbla listans storlek när den väl överskrider nuvarande kapaciteten
+                                            //vilket gör att arbetskostnaden för att lägga till element blir konstant som i sin tur bidrar till en balans mellan prestanda och minnesanvändning.
+                        Console.WriteLine($"Added '{value}' to the list.");
+                        break;
+                    case '-':
+                        if (theList.Contains(value))
+                        {
+                            theList.Remove(value);//Ö1,F5: Nej Kapaciteten minskar inte. Om vi tillexempel lägger till 5 st så att standard kapaciteten ökar,
+                                                  //minskar inte kapaciteten om vi börjar ta bort saker i listan utan förblir den samma. 
+                            Console.WriteLine($"Removed '{value}' from the list.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"'{value}' not found in the list.");
+                        }
+                        break;
+                    default:
+                        Console.WriteLine("Please use only '+' or '-' to manipulate the list.");
+                        return;
+                        //Ö1,F6: En egendefinierad Array kan vara bra att använda när man har en
+                        //samling med fast storlek som du vet i förväg och inte kommer behöva ändra storlek på dynamiskt.
+                        //Det kan då vara mer minneseffektivt.
+                        //Arrayer kan i vissa användningsfall också vara snabbare iochmed att de inte har ett förutbestämd kapacitetshantering.
+
+                }
+
+                Console.WriteLine($"Current count: {theList.Count}. Capacity: {theList.Capacity}");
+                //Ö1.
+            }
         }
 
         /// <summary>
@@ -85,11 +122,50 @@ namespace SkalProj_Datastrukturer_Minne
         /// </summary>
         static void ExamineQueue()
         {
-            /*
-             * Loop this method untill the user inputs something to exit to main menue.
-             * Create a switch with cases to enqueue items or dequeue items
-             * Make sure to look at the queue after Enqueueing and Dequeueing to see how it behaves
-            */
+            while (true)
+            {
+                Console.WriteLine("Please navigate through the queue operations by inputting the number \n(1, 2, 0) of your choice"
+                    + "\n1. Enqueue a person"
+                    + "\n2. Dequeue a person"
+                    + "\n0. Exit to main menu");
+                char input = ' ';
+                try
+                {
+                    input = Console.ReadLine()![0];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Please enter some input!");
+                }
+                switch (input)
+                {
+                    case '1':
+                        Console.WriteLine("Enter the name of the person to enqueue:");
+                        string person = Console.ReadLine();
+                        theQueue.Enqueue(person);
+                        Console.WriteLine($"{person} has been added to the queue.");
+                        theQueue.PrintQueue();
+                        break;
+                    case '2':
+                        try
+                        {
+                            string dequeuedPerson = theQueue.Dequeue();
+                            Console.WriteLine($"{dequeuedPerson} has been dequeued from the queue.");
+                            theQueue.PrintQueue();
+                        }
+                        catch (InvalidOperationException e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                        break;
+                    case '0':
+                        return;
+                    default:
+                        Console.WriteLine("Please enter some valid input (0, 1, 2)");
+                        break;
+                }
+            }
         }
 
         /// <summary>
@@ -97,23 +173,76 @@ namespace SkalProj_Datastrukturer_Minne
         /// </summary>
         static void ExamineStack()
         {
-            /*
-             * Loop this method until the user inputs something to exit to main menue.
-             * Create a switch with cases to push or pop items
-             * Make sure to look at the stack after pushing and and poping to see how it behaves
-            */
+            //Det är inte så smart att använda en Stack i det här fallet pga
+            //att det är inte så en kö fungerar. En kö ska fungera som en "först in, först ut"-metod
+            //men det går inte att utföra i en stack då den är baserad på "först in, sist ut"-metod
+            Stack<char> stack = new Stack<char>();
+
+            Console.WriteLine("Enter a string to reverse:");
+            string input = Console.ReadLine();
+            foreach (char c in input)
+            {
+                stack.Push(c);
+            }
+            Console.WriteLine("Reversed string:");
+            while (stack.Count > 0)
+            {
+                Console.Write(stack.Pop());
+            }
+            Console.WriteLine();
         }
 
         static void CheckParanthesis()
         {
             /*
-             * Use this method to check if the paranthesis in a string is Correct or incorrect.
-             * Example of correct: (()), {}, [({})],  List<int> list = new List<int>() { 1, 2, 3, 4 };
-             * Example of incorrect: (()]), [), {[()}],  List<int> list = new List<int>() { 1, 2, 3, 4 );
-             */
+            * Use this method to check if the paranthesis in a string is Correct or incorrect.
+            * Example of correct: (()), {}, [({})],  List<int> list = new List<int>() { 1, 2, 3, 4 };
+            * Example of incorrect: (()]), [), {[()}],  List<int> list = new List<int>() { 1, 2, 3, 4 );
+            */
+            Console.WriteLine("Enter a string with parantheses to check if its parentheses are balanced:");
+            string input = Console.ReadLine();
 
+            if (IsParenthesisBalanced(input))
+            {
+                Console.WriteLine("The string has correct parentheses.");
+            }
+            else
+            {
+                Console.WriteLine("The string has incorrect parentheses.");
+            }
+
+        }
+
+        static bool IsParenthesisBalanced(string input)
+        {
+            Stack<char> stack = new Stack<char>();
+
+            foreach (char c in input)
+            {
+                if (c == '(' || c == '{' || c == '[')
+                {
+                    stack.Push(c);
+                }
+                else if (c == ')' || c == '}' || c == ']')
+                {
+                    if (stack.Count == 0)
+                    {
+                        return false;
+                    }
+
+                    char top = stack.Pop();
+                    if ((c == ')' && top != '(') || (c == '}' && top != '{') || (c == ']' && top != '['))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return stack.Count == 0;
         }
 
     }
 }
+
+
 
